@@ -8,7 +8,6 @@ const rideSchema = mongoose.Schema({
     costPerSeat : {type : Number, default : 0},
     participants : [{type : mongoose.Schema.Types.ObjectId, ref : "User"}],
     createdBy : {type : mongoose.Schema.Types.ObjectId, ref : "User"},
-    dateTime : {type : Date, required : true},
 }, { timestamps: true })
 
 module.exports = mongoose.model("Ride", rideSchema);

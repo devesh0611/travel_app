@@ -5,7 +5,6 @@ const travelPlanSchema = new mongoose.Schema({
     source : {type : String, required : true},
     destination : {type : String, required : true},
     dateTime : {type : Date, required : true},
-    isVehicleBooked : {type : Boolean, default : false},
     ride : {type :mongoose.Schema.Types.ObjectId, ref : "Ride"},
 }, { timestamps: true })
 

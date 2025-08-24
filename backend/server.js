@@ -5,7 +5,7 @@ const cors = require('cors')
 const authRoutes = require('./routes/auth')
 const profileRoutes = require('./routes/user')
 const travelPlanRoutes = require('./routes/travelPlan')
-const rideRoutes = require("./routes/ride");
+const accountRoutes = require("./routes/account");
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -18,7 +18,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', profileRoutes);
 app.use('/api/travelPlans', travelPlanRoutes);
-app.use('/api/rides', rideRoutes)
+app.use('/api/auth/profile', accountRoutes);
 
 
 //Sample route 
