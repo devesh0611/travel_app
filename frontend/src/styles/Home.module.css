@@ -1,0 +1,27 @@
+.page {
+  @apply relative min-h-screen w-screen flex justify-center items-center bg-cover bg-center bg-no-repeat;
+}
+.overlay {
+  @apply absolute inset-0 bg-gradient-to-r from-blue-600/60 via-blue-400/60 to-orange-400/60;
+}
+.card {
+  @apply relative z-10 bg-white/70 backdrop-blur-md p-10 rounded-3xl shadow-2xl text-center max-w-lg w-full mx-4;
+}
+.title {
+  @apply text-5xl font-extrabold text-gray-900 mb-4;
+}
+.brand {
+  @apply bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent;
+}
+.subtitle {
+  @apply text-gray-700 text-lg mb-8;
+}
+.buttonContainer {
+  @apply flex justify-center gap-6;
+}
+.loginBtn {
+  @apply px-8 py-3 border border-gray-300 rounded-xl text-gray-800 font-semibold hover:bg-gray-100 hover:scale-105 transition-all duration-200;
+}
+.signupBtn {
+  @apply px-8 py-3 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200;
+}
