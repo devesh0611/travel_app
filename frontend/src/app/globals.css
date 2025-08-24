@@ -1,0 +1,20 @@
+/* Button styling with Tailwind applied in class, but extra glow here */
+.btn {
+  @apply px-5 py-3 rounded-lg font-semibold transition-transform duration-300;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  @apply bg-white text-blue-600 border border-blue-600;
+}
+
+.btn-secondary:hover {
+  transform: scale(1.05);
+}
