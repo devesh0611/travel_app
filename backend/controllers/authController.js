@@ -7,8 +7,11 @@ const JWT_SECRET = process.env.JWT_KEY
 //SignUp
 exports.signup = async (req, res) => {
     const {name, hall, gender, email, password} = req.body;
+    
 
     try {
+
+        console.log("Request body: ", req,body);
         // Check if user exists
         const existingUser = await User.findOne({email})
         if(existingUser) return res.status(400).json({message : 'User already exists'});
@@ -26,6 +29,7 @@ exports.signup = async (req, res) => {
         res.status(201).json({token, user : {id : newUser._id, name, hall, gender, email}});
     }
     catch(err) {
+        console.error(err);
         res.status(500).json({ message : 'SignUp failed', error : err.message});
     }
 };

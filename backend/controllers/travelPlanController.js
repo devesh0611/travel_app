@@ -149,6 +149,9 @@ const joinRide = async (req, res) => {
         const travelPlan = await TravelPlan.findById(travelPlanId)
         travelPlan.ride = ride;
         await travelPlan.save()
+
+        
+
         return res.status(200).json({message : "Successfully joined the ride"})
     }
     catch(error) {
