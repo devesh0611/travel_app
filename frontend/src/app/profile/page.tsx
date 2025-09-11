@@ -1,23 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: "Sapna Vishwakarma",
-    hostel: "Hostel A",
-    gender: "Female",
-    email: "sapna@example.com",
-    bio: "Hello! I'm an M.Tech student at IIT.",
+    name: "",
+    hall: "",
+    gender: "",
+    email: "",
     profilePic: "",
   });
 
   const [tempProfile, setTempProfile] = useState(profile);
 
-  const handleSave = () => {
+  // Fetch user info from backend using token
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token"); // get token from login
+      console.log(token);
+      if (!token) return;
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/profile`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // send token to verify user
+          },
+        });
+
+        if (res.ok) {
+          const user = await res.json();
+          setProfile(user);
+          setTempProfile(user);
+        } else {
+          console.error("Failed to fetch profile");
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
     setProfile(tempProfile);
     setIsEditing(false);
+
+    // Optional: send updated info to backend
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/account/edit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(tempProfile),
+      });
+
+      if (!res.ok) console.error("Failed to update profile");
+    } catch (err) {
+      console.error("Error updating profile:", err);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,9 +108,9 @@ export default function ProfilePage() {
             />
             <input
               type="text"
-              value={tempProfile.hostel}
+              value={tempProfile.hall}
               onChange={(e) =>
-                setTempProfile({ ...tempProfile, hostel: e.target.value })
+                setTempProfile({ ...tempProfile, hall: e.target.value })
               }
               className="w-full border rounded p-2"
               placeholder="Hostel"
@@ -76,23 +124,8 @@ export default function ProfilePage() {
               className="w-full border rounded p-2"
               placeholder="Gender"
             />
-            <input
-              type="email"
-              value={tempProfile.email}
-              onChange={(e) =>
-                setTempProfile({ ...tempProfile, email: e.target.value })
-              }
-              className="w-full border rounded p-2"
-              placeholder="Email"
-            />
-            <textarea
-              value={tempProfile.bio}
-              onChange={(e) =>
-                setTempProfile({ ...tempProfile, bio: e.target.value })
-              }
-              className="w-full border rounded p-2"
-              placeholder="Bio"
-            />
+          
+            
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setIsEditing(false)}
@@ -111,10 +144,10 @@ export default function ProfilePage() {
         ) : (
           <div className="space-y-3">
             <p><strong>Name:</strong> {profile.name}</p>
-            <p><strong>Hostel:</strong> {profile.hostel}</p>
+            <p><strong>Hostel:</strong> {profile.hall}</p>
             <p><strong>Gender:</strong> {profile.gender}</p>
             <p><strong>Email:</strong> {profile.email}</p>
-            <p><strong>Bio:</strong> {profile.bio}</p>
+          
 
             <button
               onClick={() => setIsEditing(true)}

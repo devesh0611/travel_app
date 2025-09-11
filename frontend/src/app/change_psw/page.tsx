@@ -3,14 +3,14 @@
 import { useState } from "react";
 
 export default function ChangePasswordPage() {
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [oldPassword, setoldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async() => {
     // Basic validation
-    if (!currentPassword || !newPassword || !confirmPassword) {
+    if (!oldPassword || !newPassword || !confirmPassword) {
       setMessage("All fields are required!");
       return;
     }
@@ -19,14 +19,45 @@ export default function ChangePasswordPage() {
       setMessage("New password and confirmation do not match.");
       return;
     }
+ 
+    const token = localStorage.getItem("token"); // Get token from login
+    if (!token) {
+      setMessage("You must be logged in!");
+      return;
+    }
 
+    
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/account/change`, {
+        method: "POST", // or POST depending on your backend
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          oldPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Password changed successfully!");
     // For now, just show success (replace with API call later)
-    setMessage("Password changed successfully!");
+   
     
     // Clear form
-    setCurrentPassword("");
+    setoldPassword("");
     setNewPassword("");
     setConfirmPassword("");
+  }else {
+        setMessage(data.message || "Failed to change password.");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("Error connecting to server.");
+    }
   };
 
   return (
@@ -38,8 +69,8 @@ export default function ChangePasswordPage() {
           <label className="block mb-1 font-medium">Enter Previous Password</label>
           <input
             type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
+            value={oldPassword}
+            onChange={(e) => setoldPassword(e.target.value)}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>

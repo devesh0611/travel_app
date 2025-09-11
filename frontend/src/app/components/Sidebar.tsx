@@ -8,6 +8,14 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const router = useRouter();
+
+  // Logout logic
+  const handleLogout = () => {
+    localStorage.removeItem("token"); 
+    alert("Logged out")// Remove the token
+    router.push("../"); // Redirect to landing page
+  };
+
   return (
     <div
       className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform ${
@@ -35,16 +43,14 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
                 </li>
           <li
             className="hover:text-blue-600 cursor-pointer"
-            onClick={() => alert("help yourself")}
+            onClick={() => router.push("/help-centre")}
           >
             Help Center
           </li>      
-          <li className="hover:text-red-600 cursor-pointer"
-             onClick={() => alert("Account Deleted")}
-          >Delete Account</li>
+          
           <li
             className="hover:text-yellow-600 cursor-pointer"
-            onClick={() => alert("Logged out")}
+            onClick={handleLogout}
           >
             Logout
           </li>

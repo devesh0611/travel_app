@@ -20,6 +20,13 @@ export default function Dashboard() {
   const [currentPlans, setCurrentPlans] = useState<TravelPlan[]>([]);
 
   const router = useRouter();
+  const [user, setUser] = useState<{ name: string; email: string; hall: string; gender: string } | null>(null);
+
+useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) setUser(JSON.parse(storedUser));
+}, []);
+
 
   // Load user's current plans from localStorage
   useEffect(() => {
